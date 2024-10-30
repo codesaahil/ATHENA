@@ -8,5 +8,3 @@ from core.ocean_profile import OceanProfile
 class Personality:
     emotionalState: EmotionalState
     oceanProfile: OceanProfile
-
-

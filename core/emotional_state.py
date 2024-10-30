@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+
 @dataclass
 class EmotionalState:
     _happiness: float
@@ -62,7 +63,7 @@ class EmotionalState:
         if value < 0 or value > 1:
             raise ValueError("Fear should be between 0 and 1")
         self._fear = value
-        
+
     @surprise.setter
     def surprise(self, value: float) -> None:
         if value < 0 or value > 1:
