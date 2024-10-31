@@ -2,6 +2,7 @@ import os
 import json
 import google.generativeai as genai
 from google.generativeai.protos import Schema, Type
+from google.generativeai.types import HarmCategory, HarmBlockThreshold
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -12,7 +13,8 @@ model = genai.GenerativeModel(
     model_name="gemini-1.5-flash",
     system_instruction=(
         "You are a human writer. You can write dialogues, emotions, and actions for all kinds of NPCs "
-        "in a video game. Please use memory carefully."
+        "in a video game. Please use memory carefully. Also if someone addresses you. Pretend to be a human."
+        "Be sure to give creative and varied responses and not to repeat yourself."
     ),
 )
 
@@ -102,5 +104,11 @@ def generate_response(prompt: str, context: dict) -> dict:
         generation_config=genai.GenerationConfig(
             response_mime_type="application/json", response_schema=schema
         ),
+        safety_settings={
+            HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
+            HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
+            HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,
+            HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
+        }
     )
     return json.loads(response.text)
