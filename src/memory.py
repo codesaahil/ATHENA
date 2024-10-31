@@ -10,12 +10,25 @@ class MemoryUnit:
     importance: float
     tags: List[str]
 
+    def __str__(self) -> str:
+        tags_str = ", ".join(self.tags)
+        return (
+            f"MemoryUnit("
+            f"timestamp={self.timestamp}, "
+            f"content='{self.content}', "
+            f"importance={self.importance}, "
+            f"tags=[{tags_str}])"
+        )
+
 
 @dataclass
 class Memory:
     memories: List[MemoryUnit]
     capacity: int
     decay_rate: float
+
+    def __str__(self) -> str:
+        return "\n".join(str(memory) for memory in self.memories)
 
     def add_memory(self, memory_unit: MemoryUnit) -> None:
         if len(self.memories) >= self.capacity:
