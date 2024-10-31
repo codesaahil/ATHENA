@@ -10,6 +10,17 @@ class EmotionalState:
     _fear: float
     _surprise: float
 
+    def __str__(self) -> str:
+        return (
+            f"EmotionalState("
+            f"happiness={self._happiness}, "
+            f"sadness={self._sadness}, "
+            f"anger={self._anger}, "
+            f"disgust={self._disgust}, "
+            f"fear={self._fear}, "
+            f"surprise={self._surprise})"
+        )
+
     @property
     def happiness(self) -> float:
         return self._happiness

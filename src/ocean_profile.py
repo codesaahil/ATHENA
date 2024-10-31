@@ -9,6 +9,17 @@ class OceanProfile:
     _agreeableness: float
     _neuroticism: float
 
+    def __str__(self) -> str:
+        """Returns a formatted string representation of the OceanProfile."""
+        return (
+            f"OceanProfile("
+            f"openness={self._openness}, "
+            f"conscientiousness={self._conscientiousness}, "
+            f"extraversion={self._extraversion}, "
+            f"agreeableness={self._agreeableness}, "
+            f"neuroticism={self._neuroticism})"
+        )
+
     @property
     def openness(self) -> float:
         return self._openness
