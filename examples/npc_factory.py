@@ -41,6 +41,7 @@ class IntelligentNPCFactory:
         # Create and return the IntelligentNPC
         return IntelligentNPC(memory, ocean_profile, emotional_state)
 
+
 npc = IntelligentNPCFactory.create_npc(openness=0.8, extraversion=0.7, happiness=0.9)
 
 while True:

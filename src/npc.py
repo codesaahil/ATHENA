@@ -18,7 +18,7 @@ class IntelligentNPC:
             "memory": str(self.memory),
             "personality": str(self.ocean_profile),
             "emotion": str(self.emotional_state),
-            "actions": self.possible_actions
+            "actions": self.possible_actions,
         }
         response = generate_response(dialogue, context)
 
