@@ -21,62 +21,55 @@ class EmotionalState:
             f"surprise={self._surprise})"
         )
 
+    def _validate_emotion(self, value: float) -> float:
+        if not 0 <= value <= 1:
+            raise ValueError("Emotion values should be between 0 and 1")
+        return value
+
     @property
     def happiness(self) -> float:
         return self._happiness
+
+    @happiness.setter
+    def happiness(self, value: float) -> None:
+        self._happiness = self._validate_emotion(value)
 
     @property
     def sadness(self) -> float:
         return self._sadness
 
+    @sadness.setter
+    def sadness(self, value: float) -> None:
+        self._sadness = self._validate_emotion(value)
+
     @property
     def anger(self) -> float:
         return self._anger
+
+    @anger.setter
+    def anger(self, value: float) -> None:
+        self._anger = self._validate_emotion(value)
 
     @property
     def disgust(self) -> float:
         return self._disgust
 
+    @disgust.setter
+    def disgust(self, value: float) -> None:
+        self._disgust = self._validate_emotion(value)
+
     @property
     def fear(self) -> float:
         return self._fear
+
+    @fear.setter
+    def fear(self, value: float) -> None:
+        self._fear = self._validate_emotion(value)
 
     @property
     def surprise(self) -> float:
         return self._surprise
 
-    @happiness.setter
-    def happiness(self, value: float) -> None:
-        if value < 0 or value > 1:
-            raise ValueError("Happiness should be between 0 and 1")
-        self._happiness = value
-
-    @sadness.setter
-    def sadness(self, value: float) -> None:
-        if value < 0 or value > 1:
-            raise ValueError("Sadness should be between 0 and 1")
-        self._sadness = value
-
-    @anger.setter
-    def anger(self, value: float) -> None:
-        if value < 0 or value > 1:
-            raise ValueError("Anger should be between 0 and 1")
-        self._anger = value
-
-    @disgust.setter
-    def disgust(self, value: float) -> None:
-        if value < 0 or value > 1:
-            raise ValueError("Disgust should be between 0 and 1")
-        self._disgust = value
-
-    @fear.setter
-    def fear(self, value: float) -> None:
-        if value < 0 or value > 1:
-            raise ValueError("Fear should be between 0 and 1")
-        self._fear = value
-
     @surprise.setter
     def surprise(self, value: float) -> None:
-        if value < 0 or value > 1:
-            raise ValueError("Surprise should be between 0 and 1")
-        self._surprise = value
+        self._surprise = self._validate_emotion(value)

@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from datetime import datetime
-
 from src.memory import Memory, MemoryUnit
 from src.ocean_profile import OceanProfile
 from src.emotional_state import EmotionalState
@@ -17,20 +16,22 @@ class IntelligentNPC:
 
     def respond(self, dialogue: str) -> dict:
         context = {
-            "conversation_memory": str(self.conversation_memory),
-            "permanent_memory": str(self.permanent_memory),
-            "personality": str(self.ocean_profile),
-            "emotion": str(self.emotional_state),
+            "conversation_memory": self.conversation_memory,
+            "permanent_memory": self.permanent_memory,
+            "personality": self.ocean_profile,
+            "emotion": self.emotional_state,
             "actions": self.possible_actions,
         }
+
         response = generate_response(dialogue, context)
 
-        conversation_unit = MemoryUnit(
-            timestamp=datetime.now(),
-            content=response["response"],
-            importance=0.5,
-            tags=response["tags"],
+        self.conversation_memory.add_memory(
+            MemoryUnit(
+                timestamp=datetime.now(),
+                content=response.get("response"),
+                importance=response.get("importance", 0.5),
+                tags=response.get("tags", []),
+            )
         )
-        self.conversation_memory.add_memory(conversation_unit)
 
         return response

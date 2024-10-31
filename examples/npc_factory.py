@@ -1,5 +1,4 @@
 from typing import Optional
-
 from src.npc import IntelligentNPC
 from src.emotional_state import EmotionalState
 from src.ocean_profile import OceanProfile
@@ -7,6 +6,13 @@ from src.memory import Memory
 
 
 class IntelligentNPCFactory:
+    DEFAULT_MEMORY_CAPACITY = 100
+    DEFAULT_DECAY_RATE = 0.01
+    DEFAULT_ACTIONS = {
+        "laugh": "if something is funny",
+        "smile": "if the conversation is normal",
+    }
+
     @staticmethod
     def create_npc(
         memory: Optional[Memory] = None,
@@ -22,40 +28,35 @@ class IntelligentNPCFactory:
         fear: float = 0.5,
         surprise: float = 0.5,
     ) -> IntelligentNPC:
-        """
-        Factory method to create an IntelligentNPC with given parameters.
-        Default values are set to 0.5 for all attributes if not provided.
-        """
-        # Create default memory if not provided
-        if memory is None:
-            memory = Memory([], 100, 0.01)  # Assuming Memory has a default initializer
+        memory = memory or Memory(
+            [],
+            IntelligentNPCFactory.DEFAULT_MEMORY_CAPACITY,
+            IntelligentNPCFactory.DEFAULT_DECAY_RATE,
+        )
+        conversation_memory = Memory(
+            [],
+            IntelligentNPCFactory.DEFAULT_MEMORY_CAPACITY,
+            IntelligentNPCFactory.DEFAULT_DECAY_RATE,
+        )
 
-        conversation_memory = Memory([], 100, 0.01)
-
-        # Create OceanProfile and EmotionalState objects
         ocean_profile = OceanProfile(
             openness, conscientiousness, extraversion, agreeableness, neuroticism
         )
         emotional_state = EmotionalState(
             happiness, sadness, anger, disgust, fear, surprise
         )
-        possible_actions = {
-            "laugh": "if something is funny",
-            "smile": "if the conversation is normal",
-        }
 
-        # Create and return the IntelligentNPC
         return IntelligentNPC(
             conversation_memory,
             memory,
             ocean_profile,
             emotional_state,
-            possible_actions,
+            IntelligentNPCFactory.DEFAULT_ACTIONS,
         )
 
 
 npc = IntelligentNPCFactory.create_npc(openness=0.8, extraversion=0.7, happiness=0.9)
 
 while True:
-    inp = input("Enter your response")
+    inp = input("Enter your response: ")
     print(npc.respond(inp))
