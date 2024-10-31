@@ -30,6 +30,8 @@ class IntelligentNPCFactory:
         if memory is None:
             memory = Memory([], 100, 0.01)  # Assuming Memory has a default initializer
 
+        conversation_memory = Memory([], 100, 0.01)
+
         # Create OceanProfile and EmotionalState objects
         ocean_profile = OceanProfile(
             openness, conscientiousness, extraversion, agreeableness, neuroticism
@@ -37,9 +39,19 @@ class IntelligentNPCFactory:
         emotional_state = EmotionalState(
             happiness, sadness, anger, disgust, fear, surprise
         )
+        possible_actions = {
+            "laugh": "if something is funny",
+            "smile": "if the conversation is normal",
+        }
 
         # Create and return the IntelligentNPC
-        return IntelligentNPC(memory, ocean_profile, emotional_state)
+        return IntelligentNPC(
+            conversation_memory,
+            memory,
+            ocean_profile,
+            emotional_state,
+            possible_actions,
+        )
 
 
 npc = IntelligentNPCFactory.create_npc(openness=0.8, extraversion=0.7, happiness=0.9)
