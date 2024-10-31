@@ -17,12 +17,15 @@ model = genai.GenerativeModel(
 )
 
 
-def create_schema(context: dict) -> Schema:
-    response_schema = Schema(
+def create_response_schema(context: dict) -> Schema:
+    return Schema(
         type=Type.STRING,
-        description=f"The response of the dialogue. The NPC's memory is {context["memory"]}. The NPC's current emotion is {context["emotion"]}. The NPC's personality is {context["personality"]}",
+        description=f"The response of the dialogue. The NPC's permanent memory is {context["permanent_memory"]}. The NPC's memory of this conversation is {context["conversation_memory"]}. The NPC's current emotion is {context["emotion"]}. The NPC's personality is {context["personality"]}",
     )
-    emotion_schema = Schema(
+
+
+def create_emotion_schema(context: dict) -> Schema:
+    return Schema(
         type=Type.OBJECT,
         properties={
             "happiness": Schema(
@@ -46,31 +49,42 @@ def create_schema(context: dict) -> Schema:
                 description=f"How surprised the NPC is from 0.0 to 1.0",
             ),
         },
-        description=f"The emotion of the npc after this part of the converstation.",
+        description=f"The emotion of the npc after this part of the converstation. The NPC's permanent memory is {context["permanent_memory"]}. The NPC's memory of this conversation is {context["conversation_memory"]}.",
         required=["happiness", "sadness", "anger", "disgust", "fear", "surprise"],
     )
 
-    action_schema = Schema(
+
+def create_action_schema(context: dict) -> Schema:
+    return Schema(
         type=Type.OBJECT,
         properties={
             action: Schema(type=Type.BOOLEAN, description=description)
             for action, description in context["actions"].items()
         },
-        description=f"The action of the npc after this part of the conversation. 'true' for actions to do and 'false' for the ones not to do",
+        description=f"The action of the npc after this part of the conversation. The NPC's permanent memory is {context["permanent_memory"]}. The NPC's memory of this conversation is {context["conversation_memory"]}. 'true' for actions to do and 'false' for the ones not to do",
+        required=context["actions"].keys(),
     )
 
-    schema = Schema(
+
+def create_tags_schema(context: dict) -> Schema:
+    return Schema(
+        type=Type.STRING,
+        description=f"The tags that are descriptive for the conversation till now. The NPC's permanent memory is {context["permanent_memory"]}. The NPC's memory of this conversation is {context["conversation_memory"]}.",
+    )
+
+
+def create_schema(context: dict) -> Schema:
+    return Schema(
         type=Type.OBJECT,
         properties={
-            "response": response_schema,
-            "emotion": emotion_schema,
-            "action": action_schema,
+            "response": create_response_schema(context),
+            "emotion": create_emotion_schema(context),
+            "action": create_action_schema(context),
+            "tags": create_tags_schema(context),
         },
         description="The NPC will respond. Update its emotion and perform an action.",
         required=["response", "emotion", "action"],
     )
-
-    return schema
 
 
 def generate_response(prompt: str, context: dict) -> dict:

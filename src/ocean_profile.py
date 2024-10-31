@@ -10,7 +10,6 @@ class OceanProfile:
     _neuroticism: float
 
     def __str__(self) -> str:
-        """Returns a formatted string representation of the OceanProfile."""
         return (
             f"OceanProfile("
             f"openness={self._openness}, "
