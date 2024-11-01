@@ -1,9 +1,6 @@
 # ATHENA
 
-Athena stands for "Artificially Tuned Human-
-Emu
-
-lating NPC Agent". It is library by which we can create intelligent NPCs.
+Athena stands for "Artificially Tuned Human-Emulating NPC Agent". It is library by which we can create intelligent NPCs.
 
 ## Work Done
 1. Integrate Google GEMINI API to generate dialogues.
