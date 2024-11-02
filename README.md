@@ -12,7 +12,7 @@ Athena stands for "Artificially Tuned Human-Emulating NPC Agent". It is library 
 2. Fine tune the memory and personality for more realistic generation.
 
 
-## Architecture
+## Architecture (A bit outdated. Will update soon)
 ### Emotion Class
 ![EmotionClass.png](docs/EmotionClass.png)
 
