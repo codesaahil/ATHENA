@@ -74,11 +74,6 @@ class IntelligentNPCFactory:
             IntelligentNPCFactory.DEFAULT_MEMORY_CAPACITY,
             IntelligentNPCFactory.DEFAULT_DECAY_RATE,
         )
-        conversation_memory = Memory(
-            [],
-            IntelligentNPCFactory.DEFAULT_MEMORY_CAPACITY,
-            IntelligentNPCFactory.DEFAULT_DECAY_RATE,
-        )
 
         ocean_profile = OceanProfile(
             openness, conscientiousness, extraversion, agreeableness, neuroticism
@@ -88,7 +83,7 @@ class IntelligentNPCFactory:
         )
 
         return IntelligentNPC(
-            conversation_memory,
+            [],
             memory,
             ocean_profile,
             emotional_state,
@@ -98,3 +93,7 @@ class IntelligentNPCFactory:
 
 # Example usage of the IntelligentNPCFactory
 npc = IntelligentNPCFactory.create_npc(openness=0.8, extraversion=0.7, happiness=0.9)
+
+while True:
+    inp = input("Enter your dialogue: ")
+    print(npc.talk(inp))
