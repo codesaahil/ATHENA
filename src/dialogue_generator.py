@@ -16,30 +16,23 @@ model = genai.GenerativeModel(
     model_name="gemini-1.5-flash",
     system_instruction=(
         "You are a human writer. You can write dialogues, emotions, and actions for all kinds of NPCs "
-        "in a video game. Please use memory carefully. Also if someone addresses you, pretend to be a human. "
-        "Be sure to give creative and varied responses and not to repeat yourself."
+        "in a video game. If someone addresses you, pretend to be the NPC."
     ),
 )
 
 
-def _generate_description(context: dict, additional_info: str = "") -> str:
-    """
-    Generates a description string for schemas using context.
-
-    Args:
-        context (dict): A dictionary containing NPC context information.
-        additional_info (str): Additional information to include in the description.
-
-    Returns:
-        str: A formatted string describing the NPC's memory and context.
-    """
+def _generate_description(context: dict, info: str):
     return (
-        f"{additional_info} NPC's permanent memory: {context['permanent_memory']}. "
-        f"Memory of this conversation: {context['conversation_memory']}."
+        f"{info}"
+        f"The NPC's permanent memory is {context['permanent_memory']}."
+        f"The NPC's conversation memory is {context['conversation_memory']}."
+        f"The NPC's current emotion is {context['emotion']}."
+        f"The NPC's personality is {context['personality']}."
+        f"The NPC's possible actions are {context['actions']}"
     )
 
 
-def create_response_schema(context: dict) -> Schema:
+def create_dialogue_schema(context: dict) -> Schema:
     """
     Creates a schema for the NPC's response.
 
@@ -51,9 +44,7 @@ def create_response_schema(context: dict) -> Schema:
     """
     return Schema(
         type=Type.STRING,
-        description=_generate_description(context, "The response of the dialogue. ")
-        + f"The NPC's current emotion is {context['emotion']}. "
-        + f"The NPC's personality is {context['personality']}",
+        description=_generate_description(context, "The response of the dialogue."),
     )
 
 
@@ -72,7 +63,9 @@ def create_emotion_schema(context: dict) -> Schema:
         properties={
             emotion: Schema(
                 type=Type.NUMBER,
-                description=f"How {emotion} the NPC is from 0.0 to 1.0",
+                description=_generate_description(
+                    context, f"How {emotion} the NPC is from 0.0 to 1.0"
+                ),
             )
             for emotion in [
                 "happiness",
@@ -83,9 +76,7 @@ def create_emotion_schema(context: dict) -> Schema:
                 "surprise",
             ]
         },
-        description=_generate_description(
-            context, "The emotion of the NPC after this conversation part."
-        ),
+        description="The emotion of the NPC after the conversation.",
         required=["happiness", "sadness", "anger", "disgust", "fear", "surprise"],
     )
 
@@ -107,27 +98,9 @@ def create_action_schema(context: dict) -> Schema:
             for action, description in context["actions"].items()
         },
         description=_generate_description(
-            context, "The NPC's actions after this conversation part. "
+            context, "The NPC's actions after the conversation."
         ),
         required=list(context["actions"].keys()),
-    )
-
-
-def create_tags_schema(context: dict) -> Schema:
-    """
-    Creates a schema for descriptive tags of the conversation.
-
-    Args:
-        context (dict): A dictionary containing NPC context information.
-
-    Returns:
-        Schema: A schema object representing the tags structure.
-    """
-    return Schema(
-        type=Type.STRING,
-        description=_generate_description(
-            context, "Descriptive tags for the conversation till now."
-        ),
     )
 
 
@@ -144,13 +117,14 @@ def create_schema(context: dict) -> Schema:
     return Schema(
         type=Type.OBJECT,
         properties={
-            "response": create_response_schema(context),
+            "dialogue": create_dialogue_schema(context),
             "emotion": create_emotion_schema(context),
             "action": create_action_schema(context),
-            "tags": create_tags_schema(context),
         },
-        description="The NPC will respond, update its emotion, and perform an action.",
-        required=["response", "emotion", "action"],
+        description=_generate_description(
+            context, "The NPC will respond, update its emotion, and perform an action."
+        ),
+        required=["dialogue", "emotion", "action"],
     )
 
 

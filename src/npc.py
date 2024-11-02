@@ -1,6 +1,5 @@
 from dataclasses import dataclass
-from datetime import datetime
-from src.memory import Memory, MemoryUnit
+from src.memory import Memory
 from src.ocean_profile import OceanProfile
 from src.emotional_state import EmotionalState
 from src.dialogue_generator import generate_response
@@ -19,13 +18,21 @@ class IntelligentNPC:
         possible_actions (dict): A dictionary of actions that the NPC can take.
     """
 
-    conversation_memory: Memory
+    conversation_memory: list
     permanent_memory: Memory
     ocean_profile: OceanProfile
     emotional_state: EmotionalState
     possible_actions: dict
 
-    def respond(self, dialogue: str) -> dict:
+    def _update_emotion(self, emotion: dict):
+        self.emotional_state.happiness = emotion["happiness"]
+        self.emotional_state.fear = emotion["fear"]
+        self.emotional_state.anger = emotion["anger"]
+        self.emotional_state.disgust = emotion["disgust"]
+        self.emotional_state.sadness = emotion["sadness"]
+        self.emotional_state.surprise = emotion["surprise"]
+
+    def talk(self, dialogue: str) -> dict:
         """
         Generates a response to a given dialogue and updates the NPC's memory.
 
@@ -38,25 +45,22 @@ class IntelligentNPC:
         # Create a context dictionary that includes current state and memory for response generation
         context = {
             "conversation_memory": self.conversation_memory,
-            "permanent_memory": self.permanent_memory,
-            "personality": self.ocean_profile,
-            "emotion": self.emotional_state,
+            "permanent_memory": str(self.permanent_memory),
+            "personality": str(self.ocean_profile),
+            "emotion": str(self.emotional_state),
             "actions": self.possible_actions,
         }
+
+        # Add the PC dialogue to the conversation memory
+        self.conversation_memory.append(f"pc: {dialogue}")
 
         # Generate a response using the provided dialogue and context
         response = generate_response(dialogue, context)
 
         # Add the generated response to the conversation memory
-        self.conversation_memory.add_memory(
-            MemoryUnit(
-                timestamp=datetime.now(),  # Current timestamp
-                content=response.get("response"),  # Extract response content
-                importance=response.get(
-                    "importance", 0.5
-                ),  # Default importance if not specified
-                tags=response.get("tags", []),  # Extract tags if provided
-            )
-        )
+        self.conversation_memory.append(f"npc: {response["dialogue"]}")
+
+        # Update emotion of the NPC.
+        self._update_emotion(response["emotion"])
 
         return response  # Return the generated response
