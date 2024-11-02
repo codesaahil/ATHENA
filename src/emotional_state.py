@@ -1,6 +1,24 @@
 from dataclasses import dataclass
 
 
+def _validate_emotion(value: float) -> float:
+    """
+    Validates that the emotion value is within the acceptable range (0.0 to 1.0).
+
+    Args:
+        value (float): The emotion value to validate.
+
+    Raises:
+        ValueError: If the value is not between 0 and 1.
+
+    Returns:
+        float: The validated emotion value.
+    """
+    if not 0 <= value <= 1:
+        raise ValueError("Emotion values should be between 0 and 1")
+    return value
+
+
 @dataclass
 class EmotionalState:
     """
@@ -39,23 +57,6 @@ class EmotionalState:
             f"surprise={self._surprise})"
         )
 
-    def _validate_emotion(self, value: float) -> float:
-        """
-        Validates that the emotion value is within the acceptable range (0.0 to 1.0).
-
-        Args:
-            value (float): The emotion value to validate.
-
-        Raises:
-            ValueError: If the value is not between 0 and 1.
-
-        Returns:
-            float: The validated emotion value.
-        """
-        if not 0 <= value <= 1:
-            raise ValueError("Emotion values should be between 0 and 1")
-        return value
-
     @property
     def happiness(self) -> float:
         """
@@ -77,7 +78,7 @@ class EmotionalState:
         Raises:
             ValueError: If the value is not between 0 and 1.
         """
-        self._happiness = self._validate_emotion(value)
+        self._happiness = _validate_emotion(value)
 
     @property
     def sadness(self) -> float:
@@ -100,7 +101,7 @@ class EmotionalState:
         Raises:
             ValueError: If the value is not between 0 and 1.
         """
-        self._sadness = self._validate_emotion(value)
+        self._sadness = _validate_emotion(value)
 
     @property
     def anger(self) -> float:
@@ -123,7 +124,7 @@ class EmotionalState:
         Raises:
             ValueError: If the value is not between 0 and 1.
         """
-        self._anger = self._validate_emotion(value)
+        self._anger = _validate_emotion(value)
 
     @property
     def disgust(self) -> float:
@@ -146,7 +147,7 @@ class EmotionalState:
         Raises:
             ValueError: If the value is not between 0 and 1.
         """
-        self._disgust = self._validate_emotion(value)
+        self._disgust = _validate_emotion(value)
 
     @property
     def fear(self) -> float:
@@ -169,7 +170,7 @@ class EmotionalState:
         Raises:
             ValueError: If the value is not between 0 and 1.
         """
-        self._fear = self._validate_emotion(value)
+        self._fear = _validate_emotion(value)
 
     @property
     def surprise(self) -> float:
@@ -192,4 +193,4 @@ class EmotionalState:
         Raises:
             ValueError: If the value is not between 0 and 1.
         """
-        self._surprise = self._validate_emotion(value)
+        self._surprise = _validate_emotion(value)

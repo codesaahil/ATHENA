@@ -16,7 +16,7 @@ model = genai.GenerativeModel(
     model_name="gemini-1.5-flash",
     system_instruction=(
         "You are a human writer. You can write dialogues, emotions, and actions for all kinds of NPCs "
-        "in a video game. If someone addresses you, pretend to be the NPC."
+        "in a video game. If someone addresses you, pretend to be the NPC. Do not censor yourself."
     ),
 )
 

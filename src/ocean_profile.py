@@ -1,6 +1,24 @@
 from dataclasses import dataclass
 
 
+def _validate_trait(value: float) -> float:
+    """
+    Validates that the trait value is between 0 and 1.
+
+    Args:
+        value (float): The value to validate.
+
+    Raises:
+        ValueError: If the value is not between 0 and 1.
+
+    Returns:
+        float: The validated value.
+    """
+    if not 0 <= value <= 1:
+        raise ValueError("Trait values should be between 0 and 1")
+    return value
+
+
 @dataclass
 class OceanProfile:
     """
@@ -36,23 +54,6 @@ class OceanProfile:
             f"neuroticism={self._neuroticism})"
         )
 
-    def _validate_trait(self, value: float) -> float:
-        """
-        Validates that the trait value is between 0 and 1.
-
-        Args:
-            value (float): The value to validate.
-
-        Raises:
-            ValueError: If the value is not between 0 and 1.
-
-        Returns:
-            float: The validated value.
-        """
-        if not 0 <= value <= 1:
-            raise ValueError("Trait values should be between 0 and 1")
-        return value
-
     @property
     def openness(self) -> float:
         """
@@ -74,7 +75,7 @@ class OceanProfile:
         Raises:
             ValueError: If the value is not between 0 and 1.
         """
-        self._openness = self._validate_trait(value)
+        self._openness = _validate_trait(value)
 
     @property
     def conscientiousness(self) -> float:
@@ -97,7 +98,7 @@ class OceanProfile:
         Raises:
             ValueError: If the value is not between 0 and 1.
         """
-        self._conscientiousness = self._validate_trait(value)
+        self._conscientiousness = _validate_trait(value)
 
     @property
     def extraversion(self) -> float:
@@ -120,7 +121,7 @@ class OceanProfile:
         Raises:
             ValueError: If the value is not between 0 and 1.
         """
-        self._extraversion = self._validate_trait(value)
+        self._extraversion = _validate_trait(value)
 
     @property
     def agreeableness(self) -> float:
@@ -143,7 +144,7 @@ class OceanProfile:
         Raises:
             ValueError: If the value is not between 0 and 1.
         """
-        self._agreeableness = self._validate_trait(value)
+        self._agreeableness = _validate_trait(value)
 
     @property
     def neuroticism(self) -> float:
@@ -166,4 +167,4 @@ class OceanProfile:
         Raises:
             ValueError: If the value is not between 0 and 1.
         """
-        self._neuroticism = self._validate_trait(value)
+        self._neuroticism = _validate_trait(value)
