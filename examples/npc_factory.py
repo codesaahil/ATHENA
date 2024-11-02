@@ -68,7 +68,6 @@ class IntelligentNPCFactory:
                     datetime.now(),
                     "My name is Ethan. I am a castle blacksmith. I sell weapons and armor.",
                     1.0,
-                    [],
                 )
             ],
             IntelligentNPCFactory.DEFAULT_MEMORY_CAPACITY,

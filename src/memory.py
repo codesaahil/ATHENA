@@ -13,6 +13,7 @@ class MemoryUnit:
         content (str): The content of the memory.
         importance (float): The importance of the memory, between 0.0 and 1.0.
     """
+
     timestamp: datetime
     content: str
     importance: float
@@ -42,6 +43,7 @@ class Memory:
         capacity (int): The maximum number of memories that can be stored.
         decay_rate (float): The rate at which memory importance decays over time.
     """
+
     memories: List[MemoryUnit]
     capacity: int
     decay_rate: float
