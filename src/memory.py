@@ -12,13 +12,10 @@ class MemoryUnit:
         timestamp (datetime): The time when the memory was created.
         content (str): The content of the memory.
         importance (float): The importance of the memory, between 0.0 and 1.0.
-        tags (List[str]): A list of tags associated with the memory.
     """
-
     timestamp: datetime
     content: str
     importance: float
-    tags: List[str]
 
     def __str__(self) -> str:
         """
@@ -27,13 +24,11 @@ class MemoryUnit:
         Returns:
             str: A formatted string showing the memory details.
         """
-        tags_str = ", ".join(self.tags)  # Join tags into a single string for display
         return (
             f"MemoryUnit("
             f"timestamp={self.timestamp}, "
             f"content='{self.content}', "
             f"importance={self.importance}, "
-            f"tags=[{tags_str}])"
         )
 
 
@@ -47,7 +42,6 @@ class Memory:
         capacity (int): The maximum number of memories that can be stored.
         decay_rate (float): The rate at which memory importance decays over time.
     """
-
     memories: List[MemoryUnit]
     capacity: int
     decay_rate: float
